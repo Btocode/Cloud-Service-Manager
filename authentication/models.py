@@ -26,7 +26,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'  # Use email as the unique identifier for authentication
     REQUIRED_FIELDS = ['full_name']  # Add any additional required fields

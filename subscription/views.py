@@ -1,37 +1,54 @@
-# auth/views.py
+# subscription/views.py
 
 from rest_framework import generics
 from .models import SubscriptionPlan, Permission, UserSubscription
-from .serializers import SubscriptionPlanSerializer, PermissionSerializer, UserSubscriptionSerializer
-
-# # Get all plans and create a new plan
-# path('subscriptions/plans/', SubscriptionPlanListCreateView.as_view(), name='subscription-plan'),
+from .serializers import SubscriptionPlanSerializer, PermissionSerializer, UserSubscriptionSerializer, SubscriptionPlanDetailSerializer
+from .permissions import IsAdminUserOrReadOnly
 
 class SubscriptionPlanListCreateView(generics.ListCreateAPIView):
     queryset = SubscriptionPlan.objects.all()
     serializer_class = SubscriptionPlanSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save()
-        return super().perform_create(serializer)
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return SubscriptionPlanDetailSerializer
+        return SubscriptionPlanSerializer 
 
 
 class SubscriptionPlanDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = SubscriptionPlan.objects.all()
     serializer_class = SubscriptionPlanSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
 
-class PermissionListCreateView(generics.ListCreateAPIView):
-    queryset = Permission.objects.all()
-    serializer_class = PermissionSerializer
+    # if get request, use SubscriptionPlanDetailSerializer
+    # if post request, use SubscriptionPlanSerializer
 
-class PermissionDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Permission.objects.all()
-    serializer_class = PermissionSerializer
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return SubscriptionPlanDetailSerializer
+        return SubscriptionPlanSerializer 
 
 class UserSubscriptionListCreateView(generics.ListCreateAPIView):
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
 
 class UserSubscriptionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
+
+class PermissionListCreateView(generics.ListCreateAPIView):
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
+
+class PermissionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
