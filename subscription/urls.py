@@ -4,7 +4,7 @@ from django.urls import path
 from .views import (
     SubscriptionPlanListCreateView, SubscriptionPlanDetailView,
     UserSubscriptionListCreateView, UserSubscriptionDetailView,
-    PermissionListCreateView, PermissionDetailView
+    PermissionListCreateView, PermissionDetailView, CheckUserPermissions
 )
 
 urlpatterns = [
@@ -25,5 +25,5 @@ urlpatterns = [
     # Get usage stats on a subscription
     # path('subscriptions/<int:pk>/usage', GetUsageStatsOnSubscription.as_view(), name='subscription-usage'),
     # Check access permissions of a user
-    # path('access/<int:userId>', CheckUserPermissions.as_view(), name='check-permissions'),
+    path('access/<int:userId>/<int:pid>', CheckUserPermissions.as_view(), name='check-permissions'),
 ]

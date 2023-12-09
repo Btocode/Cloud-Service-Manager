@@ -8,6 +8,8 @@ from .models import SubscriptionPlan, Permission, UserSubscription
 from rest_framework import serializers
 from .models import Permission, SubscriptionPlan
 
+from django.contrib.auth import get_user_model
+
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
@@ -46,3 +48,14 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserSubscription
         fields = '__all__'
+
+class UserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'email', 'full_name', 'is_admin']
+class UserSubscriptionDetailsSerializer(serializers.ModelSerializer):
+    user = UserDetailsSerializer(many=False, read_only=True)
+    plan = SubscriptionPlanSerializer(many=False, read_only=True)
+    class Meta:
+        model = UserSubscription
+        fields = ['id', 'user', 'plan', 'current_usage', 'custom_usage_limit']
