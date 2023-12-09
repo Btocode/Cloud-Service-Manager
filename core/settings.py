@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     "authentication",
-    'subscription'
+    'subscription',
+    'cloud_services'
 ]
 
 AUTH_USER_MODEL = 'authentication.CustomUser'
