@@ -4,10 +4,13 @@ from django.urls import path
 from .views import (
     SubscriptionPlanListCreateView, SubscriptionPlanDetailView,
     UserSubscriptionListCreateView, UserSubscriptionDetailView,
-    PermissionListCreateView, PermissionDetailView, CheckUserPermissions
+    PermissionListCreateView, PermissionDetailView, CheckUserPermissions, APiHealhCheckView, ViewCurrentPlan, ViewUserStats, SubscribeToAPlan
 )
 
 urlpatterns = [
+
+    path('', APiHealhCheckView.as_view(), name='api-health-check'),
+
     # Get all plans and create a new plan
     path('subscriptions/plans/', SubscriptionPlanListCreateView.as_view(), name='subscription-plan'),
     # Get a particular plan details, update a plan and delete a plan
@@ -26,4 +29,9 @@ urlpatterns = [
     # path('subscriptions/<int:pk>/usage', GetUsageStatsOnSubscription.as_view(), name='subscription-usage'),
     # Check access permissions of a user
     path('access/<int:userId>/<int:pid>', CheckUserPermissions.as_view(), name='check-permissions'),
+
+    # User function
+    path('user/view-current-plan', ViewCurrentPlan.as_view(), name='view-current-plan'),
+    path('user/usage', ViewUserStats.as_view(), name='view-usage'),
+    path('user/subscribe/', SubscribeToAPlan.as_view(), name='subscribe'),
 ]
