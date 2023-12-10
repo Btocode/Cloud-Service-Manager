@@ -6,11 +6,12 @@ from .serializers import SubscriptionPlanSerializer, PermissionSerializer, UserS
 from .permissions import IsAdminUserOrReadOnly, IsAdmin
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 class SubscriptionPlanListCreateView(generics.ListCreateAPIView):
     queryset = SubscriptionPlan.objects.all()
     serializer_class = SubscriptionPlanSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -21,7 +22,7 @@ class SubscriptionPlanListCreateView(generics.ListCreateAPIView):
 class SubscriptionPlanDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = SubscriptionPlan.objects.all()
     serializer_class = SubscriptionPlanSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
 
     # if get request, use SubscriptionPlanDetailSerializer
     # if post request, use SubscriptionPlanSerializer
@@ -34,13 +35,13 @@ class SubscriptionPlanDetailView(generics.RetrieveUpdateDestroyAPIView):
 class UserSubscriptionListCreateView(generics.ListCreateAPIView):
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
 
 
 class UserSubscriptionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -50,13 +51,13 @@ class UserSubscriptionDetailView(generics.RetrieveUpdateDestroyAPIView):
 class PermissionListCreateView(generics.ListCreateAPIView):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
 
 
 class PermissionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAdminUserOrReadOnly, IsAuthenticated]
 
 
 class CheckUserPermissions(APIView):
@@ -72,7 +73,7 @@ class CheckUserPermissions(APIView):
 
         for permission in user_sub.plan.permissions.all():
             if permission.id == pid:
-                if user_sub.current_usage >= user_sub.plan.usage_limit or user_sub.custom_usage_limit + user_sub.plan.usage_limit < user_sub.current_usage:
+                if user_sub.plan.usage_limit + user_sub.custom_usage_limit < user_sub.current_usage:
                     return Response({'access': 'Blocked'}, status=200)
                 return Response({'access': 'Granted'}, status=200)
         

@@ -21,11 +21,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 # In refresh token rotation, return both access and refresh 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        token['full_name'] = user.full_name
-        token['email'] = user.email
-        token['is_admin'] = user.is_admin
-        return token
-        
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['full_name'] = self.user.full_name
+        data['email'] = self.user.email
+        data['is_admin'] = self.user.is_admin
+        return data

@@ -29,7 +29,7 @@ class SubscriptionPlanSerializer(serializers.ModelSerializer):
         return plan
 
     def update(self, instance, validated_data):
-        permissions_data = validated_data.pop('permissions', [])
+        permissions_data = validated_data.get('permissions', instance.permissions.all())
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
         instance.usage_limit = validated_data.get('usage_limit', instance.usage_limit)

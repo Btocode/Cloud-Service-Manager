@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenVerifyView
 
 
 from django.urls import path
-from .views import UserRegistrationView, MyTokenObtainPairView, GetAllUsers
+from .views import UserRegistrationView, MyTokenObtainPairView, GetAllUsers, AssignAdminApiView
 
 
 
@@ -21,4 +21,5 @@ urlpatterns = [
 
     path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('users/', GetAllUsers.as_view(), name='all_users'),
+    path('assign-admin/', AssignAdminApiView.as_view(), name='assign-admin'),
 ]

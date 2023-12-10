@@ -29,3 +29,21 @@ class UserRegistrationView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+class AssignAdminApiView(APIView):
+    def post(self, request, format=None):
+        if 'id' not in request.data:
+            return Response({
+                'error': 'id is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = CustomUser.objects.get(id=request.data['id'])
+            user.is_admin = True
+            user.save()
+            return Response({
+                'message': 'Admin assigned successfully'
+            },status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            return Response({
+                'error': 'User not found'
+            }, status=status.HTTP_404_NOT_FOUND)
